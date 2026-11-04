@@ -7,13 +7,12 @@ on:
   workflow_dispatch:
 
 env:
-  PIP_USER: "0"
   PYTHONFORANDROID_PREREQUISITES_INSTALL_INTERACTIVE: "0"
 
 jobs:
   build:
     runs-on: ubuntu-22.04
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     steps:
       - name: Checkout
@@ -41,9 +40,9 @@ jobs:
       - name: Install Buildozer
         run: |
           python3 -m venv .venv
-          .venv/bin/pip install --upgrade pip setuptools wheel
-          .venv/bin/pip install buildozer cython==0.29.36
-          echo "$PWD/.venv/bin" >> $GITHUB_PATH
+          source .venv/bin/activate
+          pip install --upgrade pip setuptools wheel
+          pip install buildozer cython==0.29.36
 
       - name: Create Buildozer configuration
         run: |
@@ -66,6 +65,7 @@ jobs:
 
       - name: Build APK
         run: |
+          source .venv/bin/activate
           buildozer -v android debug
 
       - name: Upload APK
@@ -74,4 +74,3 @@ jobs:
           name: KQC-Android-APK
           path: bin/*.apk
           if-no-files-found: error
-
