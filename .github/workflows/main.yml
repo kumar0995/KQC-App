@@ -50,7 +50,9 @@ jobs:
           android.archs = arm64-v8a
           android.minapi = 23
           EOF
-
+      - name: Install Android SDK Build Tools
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;35.0.0" "platforms;android-35"
       - name: Build APK
         run: |
           export PATH="$HOME/.local/bin:$PATH"
