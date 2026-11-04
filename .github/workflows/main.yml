@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 
 env:
+  PIP_USER: "0"
   PYTHONFORANDROID_PREREQUISITES_INSTALL_INTERACTIVE: "0"
 
 jobs:
@@ -16,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v6
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
@@ -37,13 +38,12 @@ jobs:
             libssl-dev build-essential \
             gettext autopoint
 
-            - name: Install Buildozer
+      - name: Install Buildozer
         run: |
           python3 -m venv .venv
           .venv/bin/pip install --upgrade pip setuptools wheel
           .venv/bin/pip install buildozer cython==0.29.36
           echo "$PWD/.venv/bin" >> $GITHUB_PATH
-          echo "PIP_USER=0" >> $GITHUB_ENV
 
       - name: Create Buildozer configuration
         run: |
@@ -74,3 +74,4 @@ jobs:
           name: KQC-Android-APK
           path: bin/*.apk
           if-no-files-found: error
+
